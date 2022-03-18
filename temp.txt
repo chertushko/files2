@@ -1,0 +1,12 @@
+Folder src has been created
+Folder res has been created
+Folder savegames has been created
+Folder temp has been created
+Folder main has been created
+Folder test has been created
+Folder drawables has been created
+Folder vectors has been created
+Folder icons has been created
+Folder Main.java has been created
+Folder Utils.java has been created
+Folder temp.txt has been created
