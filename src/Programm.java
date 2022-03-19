@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Programm {
 
@@ -25,6 +23,15 @@ public class Programm {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+        GameProgress progress1 = new GameProgress(10, 2, 5, 55.25);
+        GameProgress progress2 = new GameProgress(4, 15, 8, 107.68);
+        GameProgress progress3 = new GameProgress(1, 8, 13, 498.66);
+
+//        String path = "C://Users//User//IdeaProjects//Games//savegames";
+        saveGame("C://Users//User//IdeaProjects//Games//savegames//save1.dat", progress1);
+        saveGame("C://Users//User//IdeaProjects//Games//savegames//save2.dat", progress2);
+        saveGame("C://Users//User//IdeaProjects//Games//savegames//save3.dat", progress3);
     }
 
     static StringBuilder createdDir(File newFile, StringBuilder sb) {
@@ -45,5 +52,16 @@ public class Programm {
             sb.append(ex.getMessage());
         }
         return sb;
+    }
+
+    static boolean saveGame(String path, GameProgress progress) {
+        try (FileOutputStream fos = new FileOutputStream(path);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(progress);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        System.out.println(progress);
+        return true;
     }
 }
