@@ -1,13 +1,15 @@
 import java.io.*;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Programm {
 
     public static void main(String[] args) {
         StringBuilder log = new StringBuilder();
-        File dirSavegames = new File("C://Users//User//IdeaProjects//Games//savegames");
+        String dir = "C://Users//User//IdeaProjects//Games//savegames";
+        File dirSavegames = new File(dir);
 
         createdDir(new File("C://Users//User//IdeaProjects//Games//src"), log);
         createdDir(new File("C://Users//User//IdeaProjects//Games//res"), log);
@@ -53,6 +55,8 @@ public class Programm {
         Arrays.stream(dirSavegames.listFiles())
                 .filter(item -> !item.getName().endsWith("zip"))
                 .forEach(File::delete);
+
+        openZip(zip, dir);
 
     }
 
@@ -103,6 +107,36 @@ public class Programm {
             System.out.println(ex.getMessage());
         }
         return true;
+
     }
+
+    public static void openZip(String pathToFile, String pathToDir){
+        try (ZipInputStream zin = new ZipInputStream(new FileInputStream(pathToFile))) {
+            ZipEntry entry;
+            String name;
+            while ((entry = zin.getNextEntry()) != null) {
+                name = entry.getName();
+                FileOutputStream fout = new FileOutputStream(pathToDir + "/" + name);
+                for (int c = zin.read(); c != -1; c = zin.read()) {
+                    fout.write(c);
+                }
+                fout.flush();
+                zin.closeEntry();
+                fout.close();
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    /*
+    
+Далее реализуйте метод openProgress(), который бы в качестве аргумента принимал путь к файлу с сохраненной игрой типа String
+(например, "/Users/admin/Games/GunRunner/savegames/save2.dat") и возвращал объект типа GameProgress.
+В данном методе Вам потребуются классы FileInputStream и ObjectInputStream.
+С помощью метода класса ObjectInputStream readObject() можно десериализовать объект, а далее привести (скастить) его к GameProgress.
+
+Так как в классе GameProgress метод toString() уже переопределен, поэтому достаточно вывести полученный объект в консоль.
+     */
+
 
 }
