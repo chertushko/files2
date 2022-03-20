@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -45,10 +46,14 @@ public class Programm {
 
         for (File file : fileList) {
             if (zipFiles(zip, fileList)) {
-               // file.delete();
                 System.out.println(file.getName() + " архивирован");
             }
         }
+
+        Arrays.stream(dirSavegames.listFiles())
+                .filter(item -> !item.getName().endsWith("zip"))
+                .forEach(File::delete);
+
     }
 
     static StringBuilder createdDir(File newFile, StringBuilder sb) {
@@ -82,11 +87,9 @@ public class Programm {
     }
 
     static boolean zipFiles(String zip, File[] files) {
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip))){
-                 for(
-            File file :files)
-
-            {
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip))) {
+            for (
+                    File file : files) {
                 try (FileInputStream fis = new FileInputStream(file)) {
                     ZipEntry entry = new ZipEntry(file.getName());
                     zos.putNextEntry(entry);
@@ -96,9 +99,10 @@ public class Programm {
                     zos.closeEntry();
                 }
             }
-        }catch(Exception ex){
-                System.out.println(ex.getMessage());
-            } return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
+        return true;
+    }
 
 }
