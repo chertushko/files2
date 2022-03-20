@@ -45,7 +45,7 @@ public class Programm {
 
         for (File file : fileList) {
             if (zipFiles(zip, fileList)) {
-                file.delete();
+               // file.delete();
                 System.out.println(file.getName() + " архивирован");
             }
         }
@@ -82,19 +82,23 @@ public class Programm {
     }
 
     static boolean zipFiles(String zip, File[] files) {
-        for (File file : files) {
-            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip));
-                 FileInputStream fis = new FileInputStream(file)) {
-                ZipEntry entry = new ZipEntry(file.getName());
-                zos.putNextEntry(entry);
-                byte[] buffer = new byte[fis.available()];
-                fis.read(buffer);
-                zos.write(buffer);
-                zos.closeEntry();
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip))){
+                 for(
+            File file :files)
+
+            {
+                try (FileInputStream fis = new FileInputStream(file)) {
+                    ZipEntry entry = new ZipEntry(file.getName());
+                    zos.putNextEntry(entry);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    zos.write(buffer);
+                    zos.closeEntry();
+                }
             }
+        }catch(Exception ex){
+                System.out.println(ex.getMessage());
+            } return true;
         }
-        return true;
-    }
+
 }
