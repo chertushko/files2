@@ -58,6 +58,10 @@ public class Programm {
 
         openZip(zip, dir);
 
+        System.out.println(openProgress(path1));
+        System.out.println(openProgress(path2));
+        System.out.println(openProgress(path3));
+
     }
 
     static StringBuilder createdDir(File newFile, StringBuilder sb) {
@@ -110,7 +114,7 @@ public class Programm {
 
     }
 
-    public static void openZip(String pathToFile, String pathToDir){
+    public static void openZip(String pathToFile, String pathToDir) {
         try (ZipInputStream zin = new ZipInputStream(new FileInputStream(pathToFile))) {
             ZipEntry entry;
             String name;
@@ -127,16 +131,20 @@ public class Programm {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-    }
-    /*
-    
-Далее реализуйте метод openProgress(), который бы в качестве аргумента принимал путь к файлу с сохраненной игрой типа String
-(например, "/Users/admin/Games/GunRunner/savegames/save2.dat") и возвращал объект типа GameProgress.
-В данном методе Вам потребуются классы FileInputStream и ObjectInputStream.
-С помощью метода класса ObjectInputStream readObject() можно десериализовать объект, а далее привести (скастить) его к GameProgress.
 
-Так как в классе GameProgress метод toString() уже переопределен, поэтому достаточно вывести полученный объект в консоль.
-     */
+    }
+
+    public static GameProgress openProgress(String path) {
+        GameProgress gameProgress = null;
+        try (FileInputStream fis = new FileInputStream(path);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+            gameProgress = (GameProgress) ois.readObject();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return gameProgress;
+    }
+    
 
 
 }
